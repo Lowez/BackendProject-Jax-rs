@@ -1,0 +1,129 @@
+openapi: 3.0.0
+info:
+  title: Product API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/v1
+paths:
+  /product/{id}/view:
+    get:
+      summary: Retrieves a product.
+      parameters:
+        - in: path
+          name: id
+          description: The ID of the product to retrieve.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A JSON response containing the product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductEntity'
+  /product/list:
+    get:
+      summary: Retrieves a list of products.
+      responses:
+        '200':
+          description: A list of ProductEntity objects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductEntity'
+  /product:
+    post:
+      summary: Adds a product to the database.
+      requestBody:
+        description: A JSON object containing information about the product to be added.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: A Response object with the message "Product added!".
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  message:
+                    type: string
+    put:
+      summary: Updates an existing product.
+      parameters:
+        - in: path
+          name: id
+          description: The ID of the product to be updated.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: A JSON object containing information about the product to be updated.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: A Response object with the message "Product edited!".
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  message:
+                    type: string
+    delete:
+      summary: Deletes a product from the database.
+      parameters:
+        - in: path
+          name: id
+          description: The ID of the product to be deleted.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A Response object with the message "Product removed!".
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  message:
+                    type: string
+components:
+  schemas:
+    ProductEntity:
+      type: object
+      properties:
+        id:
+          type: integer
+        message:
+          type: string
+    ProductRequest:
+      type: object
+      required:
+        - name
+        - description
+        - price
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
